@@ -20,7 +20,7 @@ ATrack_Planet::ATrack_Planet()
 	RootComponent = SphereComponent;
 	
 	Mesh->SetupAttachment(RootComponent);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> MESHBODY(TEXT("/Game/Meshs/BallMesh.BallMesh"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> MESHBODY(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
 	if (MESHBODY.Succeeded()) 
 		Mesh->SetStaticMesh(MESHBODY.Object);
 	Spline->SetupAttachment(RootComponent);
