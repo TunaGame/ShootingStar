@@ -13,5 +13,8 @@ UCLASS()
 class SHOOTINGSTAR_API AShootingStarPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	AShootingStarPlayerController();
 	
 };

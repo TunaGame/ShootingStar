@@ -3,3 +3,7 @@
 
 #include "ShootingStarPlayerController.h"
 
+AShootingStarPlayerController::AShootingStarPlayerController()
+{
+
+}
