@@ -14,4 +14,6 @@ class SHOOTINGSTAR_API AShootingStarGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AShootingStarGameModeBase();
 };

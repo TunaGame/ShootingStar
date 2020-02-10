@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/ShootingStarHUD.h"
 #include "ShootingStarPlayerController.generated.h"
 
 /**
@@ -16,5 +17,11 @@ class SHOOTINGSTAR_API AShootingStarPlayerController : public APlayerController
 
 public:
 	AShootingStarPlayerController();
-	
+
+	void OpenWidget(EWidgetName name);
+	void CloseWidget(EWidgetName name);
+
+	void TEST();
+protected:
+	virtual void BeginPlay() override;
 };

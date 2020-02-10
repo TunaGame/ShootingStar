@@ -7,9 +7,12 @@
 #include "Blueprint/UserWidget.h"
 #include "ShootingStarHUD.generated.h"
 
-/**
- * 
- */
+UENUM(BlueprintType)
+enum class EWidgetName : uint8
+{
+	GAMEOVER UMETA(DisplayName = "Gameover")
+};
+
 UCLASS()
 class SHOOTINGSTAR_API AShootingStarHUD : public AHUD
 {
@@ -18,11 +21,12 @@ class SHOOTINGSTAR_API AShootingStarHUD : public AHUD
 public:
 	AShootingStarHUD();
 
-	//TMap<FString, UUserWidget> WidgetMap;
-	//TPair<FString, UUserWidget> CurrentWidgetPair;
+	TMap<EWidgetName, UUserWidget*> WidgetMap;
 
 	void InitializeWidgets();
-	void OpenWidget(FString WidgetName);
-	void CloseWidget();
-
+	bool OpenWidget(EWidgetName name);
+	bool CloseWidget(EWidgetName name);
+	//GameoverUI - binding Functions
+	UFUNCTION(BlueprintCallable)
+	void RestartLevel();
 };
