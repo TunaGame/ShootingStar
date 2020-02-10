@@ -8,6 +8,7 @@
 
 AShootingStarGameModeBase::AShootingStarGameModeBase()
 {
+	DefaultPawnClass = AShootingStarPawn::StaticClass();
 	PlayerControllerClass = AShootingStarPlayerController::StaticClass();
 	HUDClass = AShootingStarHUD::StaticClass();
 }
