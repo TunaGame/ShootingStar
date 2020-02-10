@@ -26,6 +26,13 @@ class SHOOTINGSTAR_API AShootingStarPawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AShootingStarPawn();
+
+	/** Returns TopDownCameraComponent subobject **/
+	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	FVector Direction;
 	/*
 	UPROPERTY(EditAnywhere, DisplayName = "CharacterState")
 	EStateEnum CurrentState;
@@ -35,7 +42,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void Shooting(float NewAxisValue);
+	void Shooting();
 	/*
 	DECLARE_DELEGATE(FStateDelegate)
 	FStateDelegate StateDelegate;
@@ -67,11 +74,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UFloatingPawnMovement* Movement;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		USpringArmComponent* SpringArm;
+	/** Top down camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* TopDownCameraComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		UCameraComponent* Camera;
+	/** Camera boom positioning the camera above the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
+
 	/*
 	UPROPERTY(EditAnywhere)
 		EStateEnum InOut;

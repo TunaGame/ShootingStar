@@ -12,18 +12,28 @@ AShootingStarPawn::AShootingStarPawn()
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("SPHERE"));
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	Movement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MOVEMENT"));
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+
 
 	RootComponent = Sphere;
 	Mesh->SetupAttachment(Sphere);
-	SpringArm->SetupAttachment(Sphere);
-	Camera->SetupAttachment(SpringArm);
+
 
 	Sphere->SetSphereRadius(34.0f);
 	Mesh->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-	SpringArm->TargetArmLength = 400.0f;
-	SpringArm->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+
+	// Create a camera boom...
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when character does
+	CameraBoom->TargetArmLength = 800.f;
+	CameraBoom->RelativeRotation = FRotator(-60.f, 0.f, 0.f);
+	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+
+		// Create a camera...
+	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
 
 	// CurrentState = EStateEnum::StateOut;
 	// PrevState = EStateEnum::StateOut;
@@ -49,12 +59,12 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("Shooting"), this, &AShootingStarPawn::Shooting);
+	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
 }
 
-void AShootingStarPawn::Shooting(float NewAxisValue)
+void AShootingStarPawn::Shooting()
 {
-	AddMovementInput(GetActorForwardVector(), NewAxisValue);
+	AddMovementInput(GetActorForwardVector(), 1);
 }
 /*
 void AShootingStarPawn::OnIn()
