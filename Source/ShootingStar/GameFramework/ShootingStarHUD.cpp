@@ -3,3 +3,7 @@
 
 #include "ShootingStarHUD.h"
 
+AShootingStarHUD::AShootingStarHUD()
+{
+
+}
