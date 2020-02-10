@@ -21,7 +21,6 @@ public:
 	void OpenWidget(EWidgetName name);
 	void CloseWidget(EWidgetName name);
 
-	void TEST();
 protected:
 	virtual void BeginPlay() override;
 };
