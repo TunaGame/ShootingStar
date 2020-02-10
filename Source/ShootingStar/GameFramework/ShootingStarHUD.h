@@ -19,8 +19,10 @@ public:
 	AShootingStarHUD();
 
 	TMap<FString, UUserWidget> WidgetMap;
-	UUserWidget* CurrentWidget;
+	TPair<FString, UUserWidget> CurrentWidgetPair;
 
+	void InitializeWidgets();
 	void OpenWidget(FString WidgetName);
+	void CloseWidget();
 
 };

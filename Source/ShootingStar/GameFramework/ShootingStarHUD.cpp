@@ -5,5 +5,20 @@
 
 AShootingStarHUD::AShootingStarHUD()
 {
+	InitializeWidgets();
+}
+
+void AShootingStarHUD::InitializeWidgets()
+{
+	//GameOver UI
+}
+
+void AShootingStarHUD::OpenWidget(FString WidgetName)
+{
+
+}
+
+void AShootingStarHUD::CloseWidget()
+{
 
 }
