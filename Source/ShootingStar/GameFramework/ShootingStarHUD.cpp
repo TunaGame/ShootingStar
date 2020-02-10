@@ -11,6 +11,7 @@ AShootingStarHUD::AShootingStarHUD()
 void AShootingStarHUD::InitializeWidgets()
 {
 	//GameOver UI
+	//WidgetMap[FString(TEXT("Gameover"))] = 
 }
 
 void AShootingStarHUD::OpenWidget(FString WidgetName)

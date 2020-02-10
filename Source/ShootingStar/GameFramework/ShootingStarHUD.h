@@ -18,8 +18,8 @@ class SHOOTINGSTAR_API AShootingStarHUD : public AHUD
 public:
 	AShootingStarHUD();
 
-	TMap<FString, UUserWidget> WidgetMap;
-	TPair<FString, UUserWidget> CurrentWidgetPair;
+	//TMap<FString, UUserWidget> WidgetMap;
+	//TPair<FString, UUserWidget> CurrentWidgetPair;
 
 	void InitializeWidgets();
 	void OpenWidget(FString WidgetName);
