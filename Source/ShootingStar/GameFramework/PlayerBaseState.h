@@ -23,6 +23,7 @@ class SHOOTINGSTAR_API UPlayerBaseState : public UActorComponent
 protected:
 	EStateEnum mState;
 
+
 public:
 	// Sets default values for this component's properties
 	UPlayerBaseState();
@@ -41,4 +42,5 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	FORCEINLINE EStateEnum getState() const { return mState; }
+
 };
