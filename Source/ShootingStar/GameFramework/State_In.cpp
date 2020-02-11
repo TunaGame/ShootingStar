@@ -20,7 +20,7 @@ void UState_In::handleInput(AShootingStarPawn* playercenter)
 
 void UState_In::update(AShootingStarPawn* playercenter)
 {
-	UE_LOG(LogClass, Warning, TEXT("%s"), TEXT("State_In"));
+
 }
 
 void UState_In::enter(AShootingStarPawn* playercenter)
