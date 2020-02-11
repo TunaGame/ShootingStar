@@ -8,23 +8,29 @@
 #include "Engine.h"
 #include "PlayerBaseState.generated.h"
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UENUM()
+enum class EStateEnum : uint8
+{
+	IDLE,
+	INORBIT
+};
+
+UCLASS()
 class SHOOTINGSTAR_API UPlayerBaseState : public UActorComponent
 {
 	GENERATED_BODY()
+
+protected:
+	EStateEnum mState;
 
 public:
 	// Sets default values for this component's properties
 	UPlayerBaseState();
 
-	UFUNCTION()
-		virtual void handleInput(AShootingStarPawn* playercenter);
-	UFUNCTION()
-		virtual void update(AShootingStarPawn* playercenter);
-	UFUNCTION()
-		virtual void enter(AShootingStarPawn* playercenter);
-	UFUNCTION()
-		virtual void ended(AShootingStarPawn* playercenter);
+	virtual void handleInput(AShootingStarPawn* playercenter);
+	virtual void update(AShootingStarPawn* playercenter);
+	virtual void enter(AShootingStarPawn* playercenter);
+	virtual void ended(AShootingStarPawn* playercenter);
 
 protected:
 	// Called when the game starts
@@ -34,5 +40,5 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	FORCEINLINE EStateEnum getState() const { return mState; }
 };
