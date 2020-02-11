@@ -5,19 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Camera/CameraComponent.h"
 #include "ShootingStarPawn.generated.h"
-/*
-UENUM(BlueprintType)
-enum class EStateEnum : uint8
-{
-	StateIn UMETA(DisplayName = "IN"),
-	StateOut UMETA(DisplayName = "OUT")
-};
-*/
+
 UCLASS()
 class SHOOTINGSTAR_API AShootingStarPawn : public APawn
 {
@@ -29,35 +21,14 @@ public:
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
+	
 	FVector Direction;
-	/*
-	UPROPERTY(EditAnywhere, DisplayName = "CharacterState")
-	EStateEnum CurrentState;
 
-	EStateEnum PrevState;
-	*/
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Shooting();
-	/*
-	DECLARE_DELEGATE(FStateDelegate)
-	FStateDelegate StateDelegate;
 
-	UFUNCTION()
-		void OnIn();
-	UFUNCTION()
-		void OnOut();
-
-	void InStart();
-	void OutStart();
-
-	void InEnd();
-	void OutEnd();
-	*/
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -82,8 +53,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
-	/*
-	UPROPERTY(EditAnywhere)
-		EStateEnum InOut;
-		*/
+	class UPlayerBaseState* PlayerBaseState;
+	class UState_In* StateIn;
+	class UState_Idle* StateIdle;
 };
