@@ -2,6 +2,9 @@
 
 #include "ShootingStarPawn.h"
 #include "Components/InputComponent.h"
+#include "PlayerBaseState.h"
+#include "State_In.h"
+#include "State_Idle.h"
 #include "ConstructorHelpers.h"
 
 // Sets default values
@@ -32,13 +35,15 @@ AShootingStarPawn::AShootingStarPawn()
 	TopDownCameraComponent->SetAbsolute(true, true, true);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	StateIn = NewObject<UState_In>();
+	StateIdle = NewObject<UState_Idle>();
+
 }
 
 // Called when the game starts or when spawned
 void AShootingStarPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 
@@ -46,7 +51,12 @@ void AShootingStarPawn::BeginPlay()
 void AShootingStarPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AddMovementInput(Direction, 1);
+
+	if (PlayerBaseState != nullptr)
+	{
+		PlayerBaseState->update(this);
+	}
+
 }
 
 // Called to bind functionality to input
@@ -59,43 +69,22 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AShootingStarPawn::Shooting()
 {
-	Direction.Y = 1.0f;
-}
-/*
-void AShootingStarPawn::OnIn()
-{
-	// 시간이 지날 때 마다 체력이 깎임, 작아짐
-}
-
-void AShootingStarPawn::OnOut()
-{
-}
-
-void AShootingStarPawn::InStart()
-{
-	if (StateDelegate.IsBound())
+	if (PlayerBaseState == nullptr)
 	{
-		StateDelegate.Unbind();
+		Direction.Y = 1.0f;
+		PlayerBaseState = StateIdle;
 	}
-	StateDelegate.BindUFunction(this, "OnIn");
-
-}
-
-void AShootingStarPawn::OutStart()
-{
-	if (StateDelegate.IsBound())
+	else 
 	{
-		StateDelegate.Unbind();
+		PlayerBaseState->ended(this);
+		switch (PlayerBaseState->getState()) {
+		case EStateEnum::IDLE :
+			PlayerBaseState = StateIn;
+			break;
+		case EStateEnum::INORBIT :
+			PlayerBaseState = StateIdle;
+			break;
+		}
+		PlayerBaseState->enter(this);
 	}
-	StateDelegate.BindUFunction(this, "OnOut");
-
 }
-
-void AShootingStarPawn::InEnd()
-{
-}
-
-void AShootingStarPawn::OutEnd()
-{
-}
-*/
