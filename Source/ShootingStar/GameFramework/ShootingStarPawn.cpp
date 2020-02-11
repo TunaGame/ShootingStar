@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/InputComponent.h"
 #include "ShootingStarPawn.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 AShootingStarPawn::AShootingStarPawn()
