@@ -4,7 +4,10 @@
 #include "Track_Planet.h"
 #include "Components/StaticMeshComponent.h"
 #include <cmath>
+#include "Components/SplineComponent.h"
+#include "Components/SplineMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
 // Sets default values
 ATrack_Planet::ATrack_Planet()
 {
@@ -16,50 +19,20 @@ ATrack_Planet::ATrack_Planet()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("COLLISON"));
 
+
 	SphereComponent->InitSphereRadius(3.0);
 	RootComponent = SphereComponent;
-	
+
+
 	Mesh->SetupAttachment(RootComponent);
 	ConstructorHelpers::FObjectFinder<UStaticMesh> MESHBODY(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
-	if (MESHBODY.Succeeded()) 
+	if (MESHBODY.Succeeded())
 		Mesh->SetStaticMesh(MESHBODY.Object);
-	Spline->SetupAttachment(RootComponent);
-	TEnumAsByte<ESplinePointType::Type> curve = ESplinePointType::Curve;
-	/*TArray<FSplinePoint> Points;
-	Points.Init(FSplinePoint(), 4);
-	int a = 0;
-	for (int i = 0; i < 4; i++) {
-		Points.Add(FSplinePoint(i+1, FVector(i *  100.0f, i * 100.0f, 0.0f), FVector(10.0, 10.0,10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), curve));
-		a += 90;
-		if (a >= 360) {
-			a = 0;
-		}
-	}
-	Spline->AddPoints(Points, true);*/
-	double pi = 2 * acos(0.0);
-	float a = 0.0;
-	FSplinePoint p[15];
-	for (int i = 0; i < 15; i++) {
-		p[i] = FSplinePoint(i + 2, (i + 1) * FVector(FMath::Sin(a) * 30.0f,  FMath::Cos(a) * 30.0f, 0.0f), FVector(10.0, 10.0, 10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), curve);
-		Spline->AddPoint(p[i], true);
-		a += 1.57;
-		if (a >= 6.28) {
-			a = 0;
-		}
-	}
-	FSplinePoint s1=FSplinePoint(2.0f, FVector(200.0f, 200.0f, 0.0f), FVector(10.0, 10.0, 10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f),FVector(1.0f,1.0f,1.0f), curve);
-	//Spline->AddPoint(s1, true);
-	FSplinePoint s2= FSplinePoint(3.0f, FVector(300.0f, 300.0f, 0.0f), FVector(10.0, 10.0, 10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), curve);
-	//Spline->AddPoint(s2, true);
-	/*Points->
-	Spline->AddPoints(Points, true);*/
-	
 
-	UE_LOG(LogTemp, Warning, TEXT("This is %f"), FMath::Sin(FMath::DegreesToRadians(90)));
-	UE_LOG(LogTemp, Warning, TEXT("This is %f"), FMath::Sin(FMath::RadiansToDegrees(3.14)));
-	UE_LOG(LogTemp, Warning, TEXT("This is %f"), FMath::DegreesToRadians(FMath::Sin(180)));
-	UE_LOG(LogTemp, Warning, TEXT("This is %f"), FMath::RadiansToDegrees(FMath::Sin(90)));
-	UE_LOG(LogTemp, Warning, TEXT("This is %f"), FMath::Sin(4.71));
+
+	Spline->SetupAttachment(RootComponent);
+	Spline->RemoveSplinePoint(1);
+	SetupSplineMesh();
 
 }
 
@@ -67,7 +40,6 @@ ATrack_Planet::ATrack_Planet()
 void ATrack_Planet::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -75,8 +47,41 @@ void ATrack_Planet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+	RMovement->RotationRate = FRotator(0.0f, 10.0f, 0.0f);
 	//UE_LOG(LogTemp, Warning, TEXT("ddfs"));
+}
 
+void ATrack_Planet::SetupSplineMesh()
+{
+	for (int32 i = 0; i < 30; i++) {
+		// 궤도포인트 정의
+		Spline_Point[i] = FSplinePoint(i + 1, (i + 1) * FVector(FMath::Sin(Spline_Dgree) * 10.0f, FMath::Cos(Spline_Dgree) * 10.0f, 0.0f)
+			, FVector(10.0, 10.0, 10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), curve);
+		Spline->AddPoint(Spline_Point[i], true);
+		Spline_Dgree += 0.555;
+
+		// 궤도 메쉬추가
+		FString Fstring_sm = "SplineMesh" + FString::FromInt(i);   // SplineMeshComponent 이름 설정
+		FName Fname_sm = FName(*Fstring_sm);
+
+		USplineMeshComponent* SplineMesh = CreateDefaultSubobject<USplineMeshComponent>(Fname_sm);           // SplineMeshComponent초기화
+		ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
+		if (MESHSPLINE.Succeeded())
+			SplineMesh->SetStaticMesh(MESHSPLINE.Object);
+
+		SplineMesh->RegisterComponentWithWorld(this->GetWorld());
+		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
+		SplineMesh->SetMobility(EComponentMobility::Movable);
+		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::X, true);
+		SplineMesh->AttachToComponent(Spline, FAttachmentTransformRules::KeepRelativeTransform);
+
+		FVector SP = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
+		FVector ST = Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
+		FVector EP = Spline->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
+		FVector ET = Spline->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
+
+		SplineMesh->SetStartAndEnd(SP, ST, EP, ET, true);
+		SplineMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	}
 }
 

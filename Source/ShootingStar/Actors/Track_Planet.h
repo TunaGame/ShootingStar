@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SplineComponent.h"
+#include "Components/SplineMeshComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Track_Planet.generated.h"
@@ -28,14 +29,25 @@ public:
 
 private:
 	UPROPERTY(Category = "Path", VisibleAnywhere)
-	USplineComponent* Spline;
+		USplineComponent* Spline;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-	URotatingMovementComponent* RMovement;
+		URotatingMovementComponent* RMovement;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
+		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-	USphereComponent* SphereComponent;
+		USphereComponent* SphereComponent;
+
+	UPROPERTY(Category = "Path", VisibleAnywhere)
+		USplineMeshComponent* Spline_Mesh;
+
+
+	float Spline_Dgree = 0.0;
+
+	void SetupSplineMesh();
+
+	TEnumAsByte<ESplinePointType::Type> curve = ESplinePointType::Curve;  //SplinePoint е╦ют
+	FSplinePoint Spline_Point[30];
 };
