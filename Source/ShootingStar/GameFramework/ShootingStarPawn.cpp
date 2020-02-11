@@ -2,6 +2,7 @@
 
 #include "ShootingStarPawn.h"
 #include "Components/InputComponent.h"
+#include "ConstructorHelpers.h"
 
 // Sets default values
 AShootingStarPawn::AShootingStarPawn()
@@ -13,12 +14,15 @@ AShootingStarPawn::AShootingStarPawn()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	Movement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MOVEMENT"));
 
-
 	RootComponent = Sphere;
-	Mesh->SetupAttachment(Sphere);
-
-
 	Sphere->SetSphereRadius(34.0f);
+	
+	Mesh->SetupAttachment(Sphere);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> DEFAULT_SPHERE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh¼³Á¤
+	if (DEFAULT_SPHERE.Succeeded())
+	{
+		Mesh->SetStaticMesh(DEFAULT_SPHERE.Object);
+	}
 	Mesh->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
 
 	// Create a camera boom...
@@ -51,7 +55,7 @@ void AShootingStarPawn::BeginPlay()
 void AShootingStarPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	AddMovementInput(Direction, 1);
 }
 
 // Called to bind functionality to input
@@ -64,7 +68,7 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AShootingStarPawn::Shooting()
 {
-	AddMovementInput(GetActorForwardVector(), 1);
+	Direction.Y = 1.0f;
 }
 /*
 void AShootingStarPawn::OnIn()
