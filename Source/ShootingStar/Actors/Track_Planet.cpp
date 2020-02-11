@@ -2,10 +2,8 @@
 
 
 #include "Track_Planet.h"
-#include "Components/StaticMeshComponent.h"
 #include <cmath>
-#include "Components/SplineComponent.h"
-#include "Components/SplineMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/MaterialInstanceDynamic.h"
 // Sets default values
@@ -64,24 +62,26 @@ void ATrack_Planet::SetupSplineMesh()
 		FString Fstring_sm = "SplineMesh" + FString::FromInt(i);   // SplineMeshComponent 이름 설정
 		FName Fname_sm = FName(*Fstring_sm);
 
+		
 		USplineMeshComponent* SplineMesh = CreateDefaultSubobject<USplineMeshComponent>(Fname_sm);           // SplineMeshComponent초기화
 		ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
 		if (MESHSPLINE.Succeeded())
 			SplineMesh->SetStaticMesh(MESHSPLINE.Object);
 
-		SplineMesh->RegisterComponentWithWorld(this->GetWorld());
 		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 		SplineMesh->SetMobility(EComponentMobility::Movable);
-		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::X, true);
-		SplineMesh->AttachToComponent(Spline, FAttachmentTransformRules::KeepRelativeTransform);
-
+		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::Y, true);
+		
+		SplineMesh->SetupAttachment(Spline);
+		
 		FVector SP = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
 		FVector ST = Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
 		FVector EP = Spline->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
 		FVector ET = Spline->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
-
+		
 		SplineMesh->SetStartAndEnd(SP, ST, EP, ET, true);
 		SplineMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+		
 	}
 }
 
