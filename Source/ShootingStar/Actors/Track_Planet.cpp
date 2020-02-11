@@ -74,7 +74,6 @@ void ATrack_Planet::SetupSplineMesh()
 		SplineMesh->SetMobility(EComponentMobility::Movable);
 		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::X, true);
 		SplineMesh->AttachToComponent(Spline, FAttachmentTransformRules::KeepRelativeTransform);
-		
 
 		FVector SP = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
 		FVector ST = Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
