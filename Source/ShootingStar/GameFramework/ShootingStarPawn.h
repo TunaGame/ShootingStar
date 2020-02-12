@@ -28,7 +28,8 @@ public:
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
-	
+	//material
+	UMaterialParameterCollection* mCollection;
 	FVector Direction;
 	FVector ZeroPointDirection;
 
@@ -41,6 +42,8 @@ public:
 	// Called every frame
 	void SetState(EStateEnum NewState);
 	virtual void Tick(float DeltaTime) override;
+	//Pawn effect
+	void setEffect(EStateEnum NewState);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

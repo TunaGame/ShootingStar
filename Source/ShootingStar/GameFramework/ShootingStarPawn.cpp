@@ -6,7 +6,10 @@
 #include "State_In.h"
 #include "State_Idle.h"
 #include "ConstructorHelpers.h"
+#include "Materials/MaterialParameterCollection.h"
+#include "Misc/Guid.h"
 
+using namespace ELogVerbosity;
 // Sets default values
 AShootingStarPawn::AShootingStarPawn()
 {
@@ -19,15 +22,21 @@ AShootingStarPawn::AShootingStarPawn()
 
 	RootComponent = Sphere;
 	Sphere->SetSphereRadius(34.0f);
-	
+	// Mesh
 	Mesh->SetupAttachment(Sphere);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> DEFAULT_SPHERE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
-	if (DEFAULT_SPHERE.Succeeded())
+	ConstructorHelpers::FObjectFinder<UStaticMesh> ASSET_SM_PAWN(TEXT("StaticMesh'/Game/Pawn/SM_Pawn.SM_Pawn'"));// Mesh설정
+	if (ASSET_SM_PAWN.Succeeded())
 	{
-		Mesh->SetStaticMesh(DEFAULT_SPHERE.Object);
+		Mesh->SetStaticMesh(ASSET_SM_PAWN.Object);
 	}
 	Mesh->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-
+	// MaterialParameterCollection
+	ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> ASSET_MPC_PAWN(TEXT("MaterialParameterCollection'/Game/Pawn/MPC_Pawn.MPC_Pawn'"));
+	if (ASSET_MPC_PAWN.Succeeded())
+	{
+		mCollection = ASSET_MPC_PAWN.Object;
+		UE_LOG(LogTemp, Warning, TEXT("OK"));
+	}
 	// Create a camera...
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(Sphere);
@@ -44,9 +53,10 @@ AShootingStarPawn::AShootingStarPawn()
 void AShootingStarPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
+
 }
-
-
 // Called every frame
 void AShootingStarPawn::Tick(float DeltaTime)
 {
@@ -58,6 +68,7 @@ void AShootingStarPawn::Tick(float DeltaTime)
 	}
 
 }
+
 
 // Called to bind functionality to input
 void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -95,6 +106,24 @@ void AShootingStarPawn::SetState(EStateEnum NewState)
 			PlayerBaseState = StateIn;
 			PlayerBaseState->enter(this);
 		}
+		break;
+	default:
+		break;
+	}
+}
+
+
+void AShootingStarPawn::setEffect(EStateEnum NewState)
+{
+	if (mCollection == nullptr) return;
+
+	switch (NewState)
+	{
+	case EStateEnum::IDLE:
+		mCollection->ScalarParameters[0].DefaultValue = .0f;
+		break;
+	case EStateEnum::INORBIT:
+		mCollection->ScalarParameters[0].DefaultValue = 1.0f;
 		break;
 	default:
 		break;
