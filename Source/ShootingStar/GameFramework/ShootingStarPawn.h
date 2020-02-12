@@ -14,7 +14,8 @@ UENUM()
 enum class EStateEnum : uint8
 {
 	IDLE,
-	INORBIT
+	INORBIT,
+	STOP
 };
 
 UCLASS()
@@ -68,4 +69,7 @@ public:
 	class UPlayerBaseState* PlayerBaseState;
 	class UState_In* StateIn;
 	class UState_Idle* StateIdle;
+	class UState_Stop* StateStop;
+
+	EStateEnum getPawnState();
 };

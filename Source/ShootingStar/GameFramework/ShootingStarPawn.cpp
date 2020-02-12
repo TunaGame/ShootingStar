@@ -5,6 +5,7 @@
 #include "PlayerBaseState.h"
 #include "State_In.h"
 #include "State_Idle.h"
+#include "State_Stop.h"
 #include "ConstructorHelpers.h"
 #include "Materials/MaterialParameterCollection.h"
 #include "Misc/Guid.h"
@@ -46,7 +47,9 @@ AShootingStarPawn::AShootingStarPawn()
 
 	StateIn = NewObject<UState_In>();
 	StateIdle = NewObject<UState_Idle>();
+	StateStop = NewObject<UState_Stop>();
 
+	PlayerBaseState = StateStop;
 }
 
 // Called when the game starts or when spawned
@@ -61,10 +64,10 @@ void AShootingStarPawn::BeginPlay()
 void AShootingStarPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	PlayerBaseState->update(this);
 	if (PlayerBaseState != nullptr)
 	{
-		PlayerBaseState->update(this);
+		//PlayerBaseState->update(this);
 	}
 
 }
@@ -77,13 +80,30 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
 }
+/*
+EStateEnum AShootingStarPawn::getPawnState() const
+{
+	return PlayerBaseState->getState();
+}
+*/
+
+EStateEnum AShootingStarPawn::getPawnState()
+{
+	return PlayerBaseState->getState();
+}
 
 void AShootingStarPawn::Shooting()
 {
-	if (PlayerBaseState == nullptr)
+	if (PlayerBaseState->getState() == EStateEnum::STOP)
 	{
-		Direction.Y = 1.0f;
 		PlayerBaseState = StateIdle;
+	}
+	else if (PlayerBaseState->getState() == EStateEnum::INORBIT)
+	{
+		PlayerBaseState->ended(this);
+		PlayerBaseState = StateIdle;
+		PlayerBaseState->enter(this);
+		Direction = -ZeroPointDirection;
 	}
 }
 
