@@ -29,24 +29,35 @@ public:
 
 private:
 	UPROPERTY(Category = "Path", VisibleAnywhere)
-		USplineComponent* Spline;
+	USplineComponent* Spline;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-		URotatingMovementComponent* RMovement;
+	URotatingMovementComponent* RMovement;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-		UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(Category = "Pawn", VisibleAnywhere)
-		USphereComponent* SphereComponent;
+	USphereComponent* SphereComponent;
 
 	UPROPERTY(Category = "Path", VisibleAnywhere)
-		USplineMeshComponent* Spline_Mesh;
+	USplineMeshComponent* Spline_Mesh;
 
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 	float Spline_Dgree = 0.0;
 
 	void SetupSplineMesh();
+
+	FVector toShootingStarDirection();
+	bool InPlanet;
+	int32 ShootingStarDirectionPoint;
+	FVector ShootingStarDirection[30];
+
 
 	TEnumAsByte<ESplinePointType::Type> curve = ESplinePointType::Curve;  //SplinePoint е╦ют
 	FSplinePoint Spline_Point[30];
