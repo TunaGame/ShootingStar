@@ -133,8 +133,10 @@ void AShootingStarPawn::SetState(EStateEnum NewState)
 
 void AShootingStarPawn::setEffect(EStateEnum NewState)
 {
-	if (mCollection == nullptr) return;
-
+	if (mCollection == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("mCollection is nullptr"))
+		return;
+	}
 	switch (NewState)
 	{
 	case EStateEnum::IDLE:
