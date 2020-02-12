@@ -49,16 +49,16 @@ private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	float Spline_Dgree = 0.0;
+	class AShootingStarPawn* pp;
 
+	// SetupSplineMesh에서 사용
 	void SetupSplineMesh();
-
-	FVector toShootingStarDirection();
-	bool InPlanet;
-	int32 ShootingStarDirectionPoint;
-	FVector ShootingStarDirection[30];
-
-
+	float Spline_Dgree = 0.0;
 	TEnumAsByte<ESplinePointType::Type> curve = ESplinePointType::Curve;  //SplinePoint 타입
 	FSplinePoint Spline_Point[30];
+
+	//ShootingStarPawn의 방향 설정에서 사용
+	float point_num;
+	FVector shootingstar_dir;
+	bool InPlanet;
 };
