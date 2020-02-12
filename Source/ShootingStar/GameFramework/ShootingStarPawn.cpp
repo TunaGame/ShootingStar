@@ -74,17 +74,29 @@ void AShootingStarPawn::Shooting()
 		Direction.Y = 1.0f;
 		PlayerBaseState = StateIdle;
 	}
-	else 
+}
+
+void AShootingStarPawn::SetState(EStateEnum NewState)
+{
+	switch (NewState)
 	{
-		PlayerBaseState->ended(this);
-		switch (PlayerBaseState->getState()) {
-		case EStateEnum::IDLE :
-			PlayerBaseState = StateIn;
-			break;
-		case EStateEnum::INORBIT :
+	case EStateEnum::IDLE:
+		if (PlayerBaseState != nullptr && PlayerBaseState->getState() == EStateEnum::INORBIT)
+		{
+			PlayerBaseState->ended(this);
 			PlayerBaseState = StateIdle;
-			break;
+			PlayerBaseState->enter(this);
 		}
-		PlayerBaseState->enter(this);
+		break;
+	case EStateEnum::INORBIT:
+		if (PlayerBaseState != nullptr && PlayerBaseState->getState() == EStateEnum::IDLE)
+		{
+			PlayerBaseState->ended(this);
+			PlayerBaseState = StateIn;
+			PlayerBaseState->enter(this);
+		}
+		break;
+	default:
+		break;
 	}
 }

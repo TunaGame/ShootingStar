@@ -8,13 +8,6 @@
 #include "Engine.h"
 #include "PlayerBaseState.generated.h"
 
-UENUM()
-enum class EStateEnum : uint8
-{
-	IDLE,
-	INORBIT
-};
-
 UCLASS()
 class SHOOTINGSTAR_API UPlayerBaseState : public UActorComponent
 {
