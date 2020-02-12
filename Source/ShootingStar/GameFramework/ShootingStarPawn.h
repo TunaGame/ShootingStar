@@ -10,6 +10,13 @@
 #include "Camera/CameraComponent.h"
 #include "ShootingStarPawn.generated.h"
 
+UENUM()
+enum class EStateEnum : uint8
+{
+	IDLE,
+	INORBIT
+};
+
 UCLASS()
 class SHOOTINGSTAR_API AShootingStarPawn : public APawn
 {
@@ -23,6 +30,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	
 	FVector Direction;
+	FVector ZeroPointDirection;
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,6 +39,7 @@ protected:
 
 public:
 	// Called every frame
+	void SetState(EStateEnum NewState);
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
