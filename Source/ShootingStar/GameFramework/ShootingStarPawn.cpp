@@ -64,8 +64,6 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
-	//PlayerInputComponent->BindAction("In", IE_Pressed, this, &AShootingStarPawn::In);
-	//PlayerInputComponent->BindAction("Out", IE_Pressed, this, &AShootingStarPawn::Out);
 }
 
 void AShootingStarPawn::Shooting()
@@ -91,53 +89,6 @@ void AShootingStarPawn::Shooting()
 		PlayerBaseState->enter(this);
 	}*/
 }
-
-//void AShootingStarPawn::In()
-//{
-//	if (PlayerBaseState == nullptr) 
-//	{
-//		PlayerBaseState = StateIn;
-//	}
-//	else
-//	{
-//		PlayerBaseState->ended(this);
-//		switch (PlayerBaseState->getState())
-//		{
-//		case EStateEnum::IDLE :
-//			PlayerBaseState = StateIn;
-//			break;
-//		case EStateEnum::INORBIT :
-//			PlayerBaseState = StateIn;
-//			break;
-//		}
-//		PlayerBaseState->enter(this);
-//	}
-//
-//}
-//
-//void AShootingStarPawn::Out()
-//{
-//	//SetState(EStateEnum::IDLE);
-//	if (PlayerBaseState == nullptr)
-//	{
-//		PlayerBaseState = StateIdle;
-//	}
-//	else
-//	{
-//		PlayerBaseState->ended(this);
-//		switch (PlayerBaseState->getState())
-//		{
-//		case EStateEnum::IDLE :
-//			PlayerBaseState = StateIdle;
-//			break;
-//		case EStateEnum::INORBIT :
-//			PlayerBaseState = StateIdle;
-//			break;
-//		}
-//		PlayerBaseState->enter(this);
-//	}
-//
-//}
 
 void AShootingStarPawn::SetState(EStateEnum NewState)
 {
