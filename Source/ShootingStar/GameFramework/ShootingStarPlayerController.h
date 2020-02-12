@@ -21,6 +21,8 @@ public:
 	void OpenWidget(EWidgetName name);
 	void CloseWidget(EWidgetName name);
 
+	void GameOver();
+
 protected:
 	virtual void BeginPlay() override;
 };

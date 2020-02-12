@@ -9,7 +9,7 @@ using namespace ELogVerbosity;
 
 AShootingStarPlayerController::AShootingStarPlayerController()
 {
-
+	
 }
 
 void AShootingStarPlayerController::OpenWidget(EWidgetName name)
@@ -28,6 +28,11 @@ void AShootingStarPlayerController::CloseWidget(EWidgetName name)
 	{
 		bShowMouseCursor = false;
 	}
+}
+
+void AShootingStarPlayerController::GameOver()
+{
+	OpenWidget(EWidgetName::GAMEOVER);
 }
 
 void AShootingStarPlayerController::BeginPlay()
