@@ -35,10 +35,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Shooting();
-	/*
-	void In();
-	void Out();
-	*/
+
 	void SetState(EStateEnum NewState);
 
 public:
