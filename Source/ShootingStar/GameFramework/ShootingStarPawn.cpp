@@ -56,9 +56,7 @@ AShootingStarPawn::AShootingStarPawn()
 void AShootingStarPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
-
+	mCollection->ScalarParameters[0].DefaultValue = .0f;
 }
 // Called every frame
 void AShootingStarPawn::Tick(float DeltaTime)

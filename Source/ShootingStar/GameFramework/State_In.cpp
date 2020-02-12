@@ -26,6 +26,7 @@ void UState_In::update(AShootingStarPawn* playercenter)
 
 void UState_In::enter(AShootingStarPawn* playercenter)
 {
+	playercenter->setEffect(mState);
 }
 
 void UState_In::ended(AShootingStarPawn* playercenter)

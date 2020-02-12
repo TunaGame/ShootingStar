@@ -88,6 +88,8 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 {
 	auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
 
+	if (ShootingStar == nullptr) return;
+
 	pp = ShootingStar;
 	if (pp == ShootingStar) {
 		point_num = Spline->FindInputKeyClosestToWorldLocation(ShootingStar->GetActorLocation());
