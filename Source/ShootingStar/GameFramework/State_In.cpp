@@ -20,13 +20,14 @@ void UState_In::handleInput(AShootingStarPawn* playercenter)
 void UState_In::update(AShootingStarPawn* playercenter)
 {	
 	playercenter->AddMovementInput(playercenter->Direction, 1);
-	/*FVector CurrentScale = playercenter->GetActorScale();
-	playercenter->SetActorScale3D(CurrentScale - 0.005f);*/
+	if (!(playercenter->GetActorScale().Equals(FVector(0.5f, 0.5f, 0.5f)))) {
+		FVector CurrentScale = playercenter->GetActorScale();
+		playercenter->SetActorScale3D(CurrentScale - 0.005f);
+	}
 }
 
 void UState_In::enter(AShootingStarPawn* playercenter)
 {
-	playercenter->setEffect(mState);
 }
 
 void UState_In::ended(AShootingStarPawn* playercenter)

@@ -9,7 +9,7 @@ using namespace ELogVerbosity;
 
 AShootingStarPlayerController::AShootingStarPlayerController()
 {
-	
+
 }
 
 void AShootingStarPlayerController::OpenWidget(EWidgetName name)
