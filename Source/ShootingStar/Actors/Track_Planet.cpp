@@ -74,7 +74,6 @@ void ATrack_Planet::Tick(float DeltaTime)
 
 void ATrack_Planet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("testsssses"));
 	
 }
 
