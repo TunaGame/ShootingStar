@@ -25,7 +25,7 @@ AShootingStarPawn::AShootingStarPawn()
 	Sphere->SetSphereRadius(34.0f);
 	// Mesh
 	Mesh->SetupAttachment(Sphere);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> ASSET_SM_PAWN(TEXT("StaticMesh'/Game/Pawn/SM_Pawn.SM_Pawn'"));// Mesh¼³Á¤
+	ConstructorHelpers::FObjectFinder<UStaticMesh> ASSET_SM_PAWN(TEXT("StaticMesh'/Game/Pawn/SM_Pawn.SM_Pawn'"));// MeshÂ¼Â³ÃÂ¤
 	if (ASSET_SM_PAWN.Succeeded())
 	{
 		Mesh->SetStaticMesh(ASSET_SM_PAWN.Object);
@@ -133,10 +133,8 @@ void AShootingStarPawn::SetState(EStateEnum NewState)
 
 void AShootingStarPawn::setEffect(EStateEnum NewState)
 {
-	if (mCollection == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("mCollection is nullptr"))
-		return;
-	}
+	if (mCollection == nullptr) return;
+
 	switch (NewState)
 	{
 	case EStateEnum::IDLE:

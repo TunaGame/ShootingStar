@@ -9,6 +9,7 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "ShootingStar\GameFramework\ShootingStarPlayerController.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
@@ -24,6 +25,7 @@ ATrack_Planet::ATrack_Planet()
 
 	SphereComponent->InitSphereRadius(350);
 	RootComponent = SphereComponent;
+	SphereComponent->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ATrack_Planet::OnOverlapBegin);
 	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ATrack_Planet::OnOverlapEnd);
 	//Spline->OnComponentHit.AddDynamic(this, &ATrack_Planet::OnHit);
@@ -68,10 +70,13 @@ void ATrack_Planet::Tick(float DeltaTime)
 				point_num--;
 				if (point_num < 0)
 					point_num = 0;
+				if (point_num == 0) {
+					AShootingStarPlayerController* pc = Cast<AShootingStarPlayerController>(GetWorld()->GetFirstPlayerController());
+					pc->GameOver();
+				}
 			}
-			pp->ZeroPointDirection = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
+			pp->ZeroPointDirection = GetActorLocation();
 			pp->Direction = shootingstar_dir;
-
 		}
 	}
 	
@@ -109,6 +114,9 @@ void ATrack_Planet::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		ShootingStar->SetState(EStateEnum::IDLE);
 	}*/
 	//shootingstar_dir = FVector::ZeroVector;
+	if (OtherActor == nullptr) {
+		return;
+	}
 	pp = nullptr;
 	UE_LOG(LogTemp, Warning, TEXT("overlapend "));
 }
