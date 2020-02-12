@@ -94,7 +94,7 @@ void AShootingStarPawn::Shooting()
 		PlayerBaseState->enter(this);
 		Direction = -ZeroPointDirection;
 	}
-
+}
 
 void AShootingStarPawn::SetState(EStateEnum NewState)
 {
