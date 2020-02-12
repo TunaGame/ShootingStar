@@ -2,6 +2,7 @@
 
 #include "ShootingStarPawn.h"
 #include "Components/InputComponent.h"
+#include "PlayerBaseState.h"
 #include "State_In.h"
 #include "State_Idle.h"
 #include "ConstructorHelpers.h"
@@ -73,8 +74,6 @@ void AShootingStarPawn::Shooting()
 		Direction.Y = 1.0f;
 		PlayerBaseState = StateIdle;
 	}
-	//TEST
-/*
 	else 
 	{
 		PlayerBaseState->ended(this);
@@ -87,30 +86,5 @@ void AShootingStarPawn::Shooting()
 			break;
 		}
 		PlayerBaseState->enter(this);
-	}*/
-}
-
-void AShootingStarPawn::SetState(EStateEnum NewState)
-{
-	switch (NewState)
-	{
-	case EStateEnum::IDLE:
-		if (PlayerBaseState != nullptr && PlayerBaseState->getState() == EStateEnum::INORBIT)
-		{
-			PlayerBaseState->ended(this);
-			PlayerBaseState = StateIdle;
-			PlayerBaseState->enter(this);
-		}
-		break;
-	case EStateEnum::INORBIT:
-		if (PlayerBaseState != nullptr && PlayerBaseState->getState() == EStateEnum::IDLE)
-		{
-			PlayerBaseState->ended(this);
-			PlayerBaseState = StateIn;
-			PlayerBaseState->enter(this);
-		}
-		break;
-	default:
-		break;
 	}
 }

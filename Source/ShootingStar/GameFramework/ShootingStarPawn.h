@@ -10,13 +10,6 @@
 #include "Camera/CameraComponent.h"
 #include "ShootingStarPawn.generated.h"
 
-UENUM()
-enum class EStateEnum : uint8
-{
-	IDLE,
-	INORBIT
-};
-
 UCLASS()
 class SHOOTINGSTAR_API AShootingStarPawn : public APawn
 {
@@ -35,8 +28,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Shooting();
-
-	void SetState(EStateEnum NewState);
 
 public:
 	// Called every frame

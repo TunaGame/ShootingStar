@@ -2,10 +2,14 @@
 
 
 #include "Track_Planet.h"
-#include <cmath>
+#include "ShootingStar\GameFramework\ShootingStarPawn.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/Actor.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 #include "Materials/MaterialInstanceDynamic.h"
+
 // Sets default values
 ATrack_Planet::ATrack_Planet()
 {
@@ -17,9 +21,10 @@ ATrack_Planet::ATrack_Planet()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("COLLISON"));
 
-
-	SphereComponent->InitSphereRadius(3.0);
+	SphereComponent->InitSphereRadius(350);
 	RootComponent = SphereComponent;
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ATrack_Planet::OnOverlapBegin);
+	//Spline->OnComponentHit.AddDynamic(this, &ATrack_Planet::OnHit);
 
 
 	Mesh->SetupAttachment(RootComponent);
@@ -27,6 +32,7 @@ ATrack_Planet::ATrack_Planet()
 	if (MESHBODY.Succeeded())
 		Mesh->SetStaticMesh(MESHBODY.Object);
 
+	InPlanet = false;
 
 	Spline->SetupAttachment(RootComponent);
 	Spline->RemoveSplinePoint(1);
@@ -38,16 +44,54 @@ ATrack_Planet::ATrack_Planet()
 void ATrack_Planet::BeginPlay()
 {
 	Super::BeginPlay();
+	pp = Cast<AShootingStarPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 // Called every frame
 void ATrack_Planet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	RMovement->RotationRate = FRotator(0.0f, 10.0f, 0.0f);
+	
+	
+	if (InPlanet) {
+		shootingstar_dir= Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
+		
+		if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f&&point_num>0)
+		{
+			point_num--;
+			if (point_num < 0)
+				point_num = 0;
+		}
+		
+		pp->Direction = shootingstar_dir;
+
+	}
 	//UE_LOG(LogTemp, Warning, TEXT("ddfs"));
 }
+
+void ATrack_Planet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("testsssses"));
+	
+}
+
+void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
+
+	if (ShootingStar!=nullptr&&pp == ShootingStar) {
+		point_num = Spline->FindInputKeyClosestToWorldLocation(ShootingStar->GetActorLocation());
+		InPlanet = true;
+	}
+	
+	FString Fstring_sm = FString::FromInt(point_num);
+	FName Fname_sm = FName(*Fstring_sm);
+	UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
+
+}
+
+
 
 void ATrack_Planet::SetupSplineMesh()
 {
@@ -64,9 +108,9 @@ void ATrack_Planet::SetupSplineMesh()
 
 		
 		USplineMeshComponent* SplineMesh = CreateDefaultSubobject<USplineMeshComponent>(Fname_sm);           // SplineMeshComponent초기화
-		ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
+		/*ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
 		if (MESHSPLINE.Succeeded())
-			SplineMesh->SetStaticMesh(MESHSPLINE.Object);
+			SplineMesh->SetStaticMesh(MESHSPLINE.Object);*/
 
 		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 		SplineMesh->SetMobility(EComponentMobility::Movable);
