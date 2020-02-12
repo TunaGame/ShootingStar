@@ -23,6 +23,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	
 	FVector Direction;
+	FVector ZeroPointDirection;
 
 protected:
 	// Called when the game starts or when spawned
