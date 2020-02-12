@@ -63,7 +63,7 @@ void ATrack_Planet::Tick(float DeltaTime)
 			if (point_num < 0)
 				point_num = 0;
 		}
-		
+		pp->ZeroPointDirection = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
 		pp->Direction = shootingstar_dir;
 
 	}
@@ -83,6 +83,7 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	if (ShootingStar!=nullptr&&pp == ShootingStar) {
 		point_num = Spline->FindInputKeyClosestToWorldLocation(ShootingStar->GetActorLocation());
 		InPlanet = true;
+		ShootingStar->SetState(EStateEnum::INORBIT);
 	}
 	
 	FString Fstring_sm = FString::FromInt(point_num);
