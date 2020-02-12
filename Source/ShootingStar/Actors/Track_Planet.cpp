@@ -17,7 +17,7 @@ ATrack_Planet::ATrack_Planet()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("SPLINE"));
+	
 	RMovement = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("ROTATEMOVEMENT"));
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("COLLISON"));
@@ -25,6 +25,7 @@ ATrack_Planet::ATrack_Planet()
 	SphereComponent->InitSphereRadius(350);
 	RootComponent = SphereComponent;
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ATrack_Planet::OnOverlapBegin);
+	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ATrack_Planet::OnOverlapEnd);
 	//Spline->OnComponentHit.AddDynamic(this, &ATrack_Planet::OnHit);
 
 
@@ -33,6 +34,7 @@ ATrack_Planet::ATrack_Planet()
 	if (MESHBODY.Succeeded())
 		Mesh->SetStaticMesh(MESHBODY.Object);
 
+	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("SPLINE"));
 	Spline->SetupAttachment(RootComponent);
 	Spline->RemoveSplinePoint(1);
 	SetupSplineMesh();
@@ -43,7 +45,9 @@ ATrack_Planet::ATrack_Planet()
 void ATrack_Planet::BeginPlay()
 {
 	Super::BeginPlay();
-	pp = Cast<AShootingStarPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	//pp = Cast<AShootingStarPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
+	
 }
 
 // Called every frame
@@ -52,22 +56,25 @@ void ATrack_Planet::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	RMovement->RotationRate = FRotator(0.0f, 10.0f, 0.0f);
 	
-	if (pp->getPawnState() == EStateEnum::INORBIT) {
-		shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
-		FString Fstring_sm = shootingstar_dir.ToString();
-		FName Fname_sm = FName(*Fstring_sm);
-		UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
+	if (pp != nullptr) {
+		if (pp->getPawnState() == EStateEnum::INORBIT) {
+			shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
+			FString Fstring_sm = shootingstar_dir.ToString();
+			FName Fname_sm = FName(*Fstring_sm);
+			UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
 
-		if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
-		{
-			point_num--;
-			if (point_num < 0)
-				point_num = 0;
+			if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
+			{
+				point_num--;
+				if (point_num < 0)
+					point_num = 0;
+			}
+			pp->ZeroPointDirection = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
+			pp->Direction = shootingstar_dir;
+
 		}
-		pp->ZeroPointDirection = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
-		pp->Direction = shootingstar_dir;
-
 	}
+	
 	
 	//UE_LOG(LogTemp, Warning, TEXT("ddfs"));
 }
@@ -81,6 +88,7 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 {
 	auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
 
+	pp = ShootingStar;
 	if (pp == ShootingStar) {
 		point_num = Spline->FindInputKeyClosestToWorldLocation(ShootingStar->GetActorLocation());
 		ShootingStar->SetState(EStateEnum::INORBIT);
@@ -91,6 +99,18 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
 
 }
+
+void ATrack_Planet::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	/*auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
+	if (pp == ShootingStar) {
+		ShootingStar->SetState(EStateEnum::IDLE);
+	}*/
+	//shootingstar_dir = FVector::ZeroVector;
+	pp = nullptr;
+	UE_LOG(LogTemp, Warning, TEXT("overlapend "));
+}
+
 
 
 
