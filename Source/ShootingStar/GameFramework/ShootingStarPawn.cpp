@@ -69,12 +69,21 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
 }
+<<<<<<< HEAD
+/*
+EStateEnum AShootingStarPawn::getPawnState() const
+{
+	return PlayerBaseState->getState();
+}
+*/
+=======
 
 EStateEnum AShootingStarPawn::getPawnState()
 {
 	return PlayerBaseState->getState();
 }
 
+>>>>>>> 301bc883f7f779d78241b2441d74ae95a5c4e04e
 void AShootingStarPawn::Shooting()
 {
 	if (PlayerBaseState->getState() == EStateEnum::STOP)
@@ -86,9 +95,15 @@ void AShootingStarPawn::Shooting()
 		PlayerBaseState->ended(this);
 		PlayerBaseState = StateIdle;
 		PlayerBaseState->enter(this);
+<<<<<<< HEAD
+		Direction = ZeroPointDirection;
+	}
+	
+=======
 		Direction = -ZeroPointDirection;
 	}
 
+>>>>>>> 301bc883f7f779d78241b2441d74ae95a5c4e04e
 }
 
 void AShootingStarPawn::SetState(EStateEnum NewState)

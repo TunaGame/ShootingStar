@@ -66,7 +66,11 @@ public:
 	class UPlayerBaseState* PlayerBaseState;
 	class UState_In* StateIn;
 	class UState_Idle* StateIdle;
+<<<<<<< HEAD
+	// EStateEnum getPawnState() const;
+=======
 	class UState_Stop* StateStop;
 
 	EStateEnum getPawnState();
+>>>>>>> 301bc883f7f779d78241b2441d74ae95a5c4e04e
 };
