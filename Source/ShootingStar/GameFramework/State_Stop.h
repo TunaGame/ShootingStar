@@ -17,6 +17,7 @@ class SHOOTINGSTAR_API UState_Stop : public UPlayerBaseState
 public:
 	UState_Stop();
 
+
 	virtual void handleInput(AShootingStarPawn* playercenter) override;
 	virtual void update(AShootingStarPawn* playercenter) override;
 	virtual void enter(AShootingStarPawn* playercenter) override;

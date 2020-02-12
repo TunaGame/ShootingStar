@@ -17,6 +17,7 @@ void UState_Stop::handleInput(AShootingStarPawn* playercenter)
 void UState_Stop::update(AShootingStarPawn* playercenter)
 {
 	playercenter->Direction.Y = 1.0f;
+
 }
 
 void UState_Stop::enter(AShootingStarPawn* playercenter)
