@@ -24,7 +24,7 @@ public:
 	virtual void update(AShootingStarPawn* playercenter);
 	virtual void enter(AShootingStarPawn* playercenter);
 	virtual void ended(AShootingStarPawn* playercenter);
-
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

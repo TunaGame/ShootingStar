@@ -3,6 +3,7 @@
 
 #include "Track_Planet.h"
 #include "ShootingStar\GameFramework\ShootingStarPawn.h"
+#include "ShootingStar\GameFramework\PlayerBaseState.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/Actor.h"
@@ -32,8 +33,6 @@ ATrack_Planet::ATrack_Planet()
 	if (MESHBODY.Succeeded())
 		Mesh->SetStaticMesh(MESHBODY.Object);
 
-	InPlanet = false;
-
 	Spline->SetupAttachment(RootComponent);
 	Spline->RemoveSplinePoint(1);
 	SetupSplineMesh();
@@ -53,11 +52,12 @@ void ATrack_Planet::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	RMovement->RotationRate = FRotator(0.0f, 10.0f, 0.0f);
 	
-	
-	if (InPlanet) {
-		shootingstar_dir= Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
-		
-		if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f&&point_num>0)
+	if (pp->getPawnState() == EStateEnum::INORBIT) {
+		shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
+		FString Fstring_sm = shootingstar_dir.ToString();
+		FName Fname_sm = FName(*Fstring_sm);
+		UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
+		if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
 		{
 			point_num--;
 			if (point_num < 0)
@@ -67,6 +67,7 @@ void ATrack_Planet::Tick(float DeltaTime)
 		pp->Direction = shootingstar_dir;
 
 	}
+	
 	//UE_LOG(LogTemp, Warning, TEXT("ddfs"));
 }
 
@@ -80,9 +81,8 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 {
 	auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
 
-	if (ShootingStar!=nullptr&&pp == ShootingStar) {
+	if (pp == ShootingStar) {
 		point_num = Spline->FindInputKeyClosestToWorldLocation(ShootingStar->GetActorLocation());
-		InPlanet = true;
 		ShootingStar->SetState(EStateEnum::INORBIT);
 	}
 	
