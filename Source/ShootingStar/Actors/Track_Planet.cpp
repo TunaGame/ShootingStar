@@ -56,7 +56,8 @@ void ATrack_Planet::Tick(float DeltaTime)
 		shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
 		FString Fstring_sm = shootingstar_dir.ToString();
 		FName Fname_sm = FName(*Fstring_sm);
-		UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
+		UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
+
 		if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
 		{
 			point_num--;
