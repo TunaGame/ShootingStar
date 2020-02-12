@@ -60,5 +60,4 @@ private:
 	//ShootingStarPawn의 방향 설정에서 사용
 	float point_num;
 	FVector shootingstar_dir;
-	bool InPlanet;
 };

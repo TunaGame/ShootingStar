@@ -5,6 +5,7 @@
 #include "PlayerBaseState.h"
 #include "State_In.h"
 #include "State_Idle.h"
+#include "State_Stop.h"
 #include "ConstructorHelpers.h"
 
 // Sets default values
@@ -19,7 +20,7 @@ AShootingStarPawn::AShootingStarPawn()
 
 	RootComponent = Sphere;
 	Sphere->SetSphereRadius(34.0f);
-	
+
 	Mesh->SetupAttachment(Sphere);
 	ConstructorHelpers::FObjectFinder<UStaticMesh> DEFAULT_SPHERE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh¼³Á¤
 	if (DEFAULT_SPHERE.Succeeded())
@@ -37,7 +38,9 @@ AShootingStarPawn::AShootingStarPawn()
 
 	StateIn = NewObject<UState_In>();
 	StateIdle = NewObject<UState_Idle>();
+	StateStop = NewObject<UState_Stop>();
 
+	PlayerBaseState = StateStop;
 }
 
 // Called when the game starts or when spawned
@@ -51,10 +54,10 @@ void AShootingStarPawn::BeginPlay()
 void AShootingStarPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	PlayerBaseState->update(this);
 	if (PlayerBaseState != nullptr)
 	{
-		PlayerBaseState->update(this);
+		//PlayerBaseState->update(this);
 	}
 
 }
@@ -66,17 +69,25 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
 }
+<<<<<<< HEAD
 /*
 EStateEnum AShootingStarPawn::getPawnState() const
 {
 	return PlayerBaseState->getState();
 }
 */
+=======
+
+EStateEnum AShootingStarPawn::getPawnState()
+{
+	return PlayerBaseState->getState();
+}
+
+>>>>>>> 301bc883f7f779d78241b2441d74ae95a5c4e04e
 void AShootingStarPawn::Shooting()
 {
-	if (PlayerBaseState == nullptr)
+	if (PlayerBaseState->getState() == EStateEnum::STOP)
 	{
-		Direction.Y = 1.0f;
 		PlayerBaseState = StateIdle;
 	}
 	else if (PlayerBaseState->getState() == EStateEnum::INORBIT)
@@ -84,9 +95,15 @@ void AShootingStarPawn::Shooting()
 		PlayerBaseState->ended(this);
 		PlayerBaseState = StateIdle;
 		PlayerBaseState->enter(this);
+<<<<<<< HEAD
 		Direction = ZeroPointDirection;
 	}
 	
+=======
+		Direction = -ZeroPointDirection;
+	}
+
+>>>>>>> 301bc883f7f779d78241b2441d74ae95a5c4e04e
 }
 
 void AShootingStarPawn::SetState(EStateEnum NewState)
