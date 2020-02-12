@@ -2,18 +2,11 @@
 
 #pragma once
 
+#include "Engine.h"
 #include "CoreMinimal.h"
 #include "ShootingStarPawn.h"
 #include "Components/ActorComponent.h"
-#include "Engine.h"
 #include "PlayerBaseState.generated.h"
-
-UENUM()
-enum class EStateEnum : uint8
-{
-	IDLE,
-	INORBIT
-};
 
 UCLASS()
 class SHOOTINGSTAR_API UPlayerBaseState : public UActorComponent
