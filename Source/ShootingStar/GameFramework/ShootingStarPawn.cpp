@@ -66,7 +66,12 @@ void AShootingStarPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction("Shooting", IE_Pressed, this, &AShootingStarPawn::Shooting);
 }
-
+/*
+EStateEnum AShootingStarPawn::getPawnState() const
+{
+	return PlayerBaseState->getState();
+}
+*/
 void AShootingStarPawn::Shooting()
 {
 	if (PlayerBaseState == nullptr)
@@ -74,6 +79,14 @@ void AShootingStarPawn::Shooting()
 		Direction.Y = 1.0f;
 		PlayerBaseState = StateIdle;
 	}
+	else if (PlayerBaseState->getState() == EStateEnum::INORBIT)
+	{
+		PlayerBaseState->ended(this);
+		PlayerBaseState = StateIdle;
+		PlayerBaseState->enter(this);
+		Direction = ZeroPointDirection;
+	}
+	
 }
 
 void AShootingStarPawn::SetState(EStateEnum NewState)
