@@ -15,7 +15,7 @@ UPlayerBaseState::UPlayerBaseState()
 
 void UPlayerBaseState::handleInput(AShootingStarPawn* playercenter)
 {
-
+	
 }
 
 void UPlayerBaseState::update(AShootingStarPawn* playercenter)
