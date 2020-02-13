@@ -73,10 +73,14 @@ public:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
-
+	
+	UPROPERTY()
 	class UPlayerBaseState* PlayerBaseState;
+	UPROPERTY()
 	class UState_In* StateIn;
+	UPROPERTY()
 	class UState_Idle* StateIdle;
+	UPROPERTY()
 	class UState_Stop* StateStop;
 
 	EStateEnum getPawnState();
