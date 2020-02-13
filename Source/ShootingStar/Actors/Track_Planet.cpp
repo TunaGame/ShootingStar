@@ -61,9 +61,7 @@ void ATrack_Planet::Tick(float DeltaTime)
 	if (pp != nullptr) {
 		if (pp->getPawnState() == EStateEnum::INORBIT) {
 			shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
-			FString Fstring_sm = shootingstar_dir.ToString();
-			FName Fname_sm = FName(*Fstring_sm);
-			//UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
+			
 
 			if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
 			{
@@ -75,8 +73,11 @@ void ATrack_Planet::Tick(float DeltaTime)
 					pc->GameOver();
 				}
 			}
-			pp->ZeroPointDirection = GetActorLocation();
+			pp->ZeroPointDirection = GetActorLocation()- pp->GetActorLocation();
 			pp->Direction = shootingstar_dir;
+			/*FString Fstring_sm = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World).ToString();
+			FName Fname_sm = FName(*Fstring_sm);
+			UE_LOG(LogTemp, Warning, TEXT("ZeroPointDirection : %s"), *Fstring_sm);*/
 		}
 	}
 	

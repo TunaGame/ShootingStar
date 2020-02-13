@@ -27,13 +27,13 @@ ASpaceDust::ASpaceDust()
 		Mesh->SetStaticMesh(MESHBODY.Object);
 	}
 	ssIn = false;
-	dustspeed = 0.1f;
 }
 
 // Called when the game starts or when spawned
 void ASpaceDust::BeginPlay()
 {
 	Super::BeginPlay();
+	dustspeed = 0.1f;
 }
 
 // Called every frame

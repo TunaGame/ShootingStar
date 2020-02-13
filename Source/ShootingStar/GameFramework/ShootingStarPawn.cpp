@@ -95,6 +95,7 @@ void AShootingStarPawn::Shooting()
 	if (PlayerBaseState->getState() == EStateEnum::STOP)
 	{
 		PlayerBaseState = StateIdle;
+		PlayerBaseState->enter(this);
 	}
 	else if (PlayerBaseState->getState() == EStateEnum::INORBIT)
 	{
