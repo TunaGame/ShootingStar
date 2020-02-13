@@ -7,7 +7,6 @@
 #include "State_Idle.h"
 #include "State_Stop.h"
 #include "ConstructorHelpers.h"
-#include "Materials/MaterialParameterCollection.h"
 #include "GameFramework/ShootingStarPlayerController.h"
 #include "Misc/Guid.h"
 
@@ -32,13 +31,8 @@ AShootingStarPawn::AShootingStarPawn()
 		Mesh->SetStaticMesh(ASSET_SM_PAWN.Object);
 	}
 	Mesh->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-	// MaterialParameterCollection
-	ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> ASSET_MPC_PAWN(TEXT("MaterialParameterCollection'/Game/Pawn/MPC_Pawn.MPC_Pawn'"));
-	if (ASSET_MPC_PAWN.Succeeded())
-	{
-		mCollection = ASSET_MPC_PAWN.Object;
-		UE_LOG(LogTemp, Warning, TEXT("OK"));
-	}
+	//MaterialInstanceDynamic
+	//UMaterialInterface* mMaterial = Mesh->GetMaterial(0);
 	// Create a camera...
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(Sphere);
@@ -65,10 +59,9 @@ void AShootingStarPawn::BeginPlay()
 void AShootingStarPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	PlayerBaseState->update(this);
 	if (PlayerBaseState != nullptr)
 	{
-		//PlayerBaseState->update(this);
+		PlayerBaseState->update(this);
 	}
 
 }
@@ -121,6 +114,7 @@ void AShootingStarPawn::ClearTimeoverTimer()
 
 void AShootingStarPawn::Timeover()
 {
+	GetWorldTimerManager().ClearTimer(GameoverTimerHandle);
 	AShootingStarPlayerController* mController = Cast<AShootingStarPlayerController>(GetController());
 	if (mController != nullptr)
 	{
@@ -156,15 +150,18 @@ void AShootingStarPawn::SetState(EStateEnum NewState)
 
 void AShootingStarPawn::setEffect(EStateEnum NewState)
 {
-	if (mCollection == nullptr) return;
+	if (Mesh == nullptr) return;
 
 	switch (NewState)
 	{
 	case EStateEnum::IDLE:
-		mCollection->ScalarParameters[0].DefaultValue = .0f;
+		UE_LOG(LogTemp, Warning, TEXT("IDLE EFFECT"));
+		Mesh->SetScalarParameterValueOnMaterials("Burn", .0f);
 		break;
 	case EStateEnum::INORBIT:
-		mCollection->ScalarParameters[0].DefaultValue = 1.0f;
+		Mesh->SetScalarParameterValueOnMaterials("Burn", 1.0f);
+		UE_LOG(LogTemp, Warning, TEXT("INORBIT EFFECT"));
+
 		break;
 	default:
 		break;

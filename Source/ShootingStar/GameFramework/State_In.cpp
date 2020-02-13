@@ -21,14 +21,20 @@ void UState_In::update(AShootingStarPawn* playercenter)
 {	
 	//playercenter->Movement->MaxSpeed = playercenter->Movement->MaxSpeed-50.0f;
 	playercenter->AddMovementInput(playercenter->Direction, 1);
-	if (!(playercenter->GetActorScale().Equals(FVector(0.5f, 0.5f, 0.5f)))) {
+	if (!(playercenter->GetActorScale().Equals(FVector(0.2f, 0.2f, 0.2f)))) {
 		FVector CurrentScale = playercenter->GetActorScale();
-		playercenter->SetActorScale3D(CurrentScale - 0.005f);
+		playercenter->SetActorScale3D(CurrentScale - 0.001f);
 	}
+	else 
+	{
+		playercenter->Timeover();
+	}
+
 }
 
 void UState_In::enter(AShootingStarPawn* playercenter)
 {
+	playercenter->setEffect(mState);
 }
 
 void UState_In::ended(AShootingStarPawn* playercenter)

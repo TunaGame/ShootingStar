@@ -29,8 +29,9 @@ public:
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
-	//material
-	UMaterialParameterCollection* mCollection;
+	// material
+	//UMaterialInterface* mMaterial;
+	// 
 	FVector Direction;
 	FVector ZeroPointDirection;
 	FTimerHandle GameoverTimerHandle;

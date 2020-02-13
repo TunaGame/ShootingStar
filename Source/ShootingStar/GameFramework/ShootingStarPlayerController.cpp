@@ -2,7 +2,7 @@
 
 
 #include "ShootingStarPlayerController.h"
-#include "Components/SplineMeshComponent.h"
+#include "GameFramework/ShootingStarPawn.h"
 #include "TimerManager.h"
 
 using namespace ELogVerbosity;
@@ -32,7 +32,11 @@ void AShootingStarPlayerController::CloseWidget(EWidgetName name)
 
 void AShootingStarPlayerController::GameOver()
 {
-	OpenWidget(EWidgetName::GAMEOVER);
+	AShootingStarPawn* mPawn = Cast<AShootingStarPawn>(GetPawn());
+	if (mPawn != nullptr) {
+		mPawn->Mesh->SetVisibility(false, true);
+		OpenWidget(EWidgetName::GAMEOVER);
+	}
 }
 
 void AShootingStarPlayerController::BeginPlay()
