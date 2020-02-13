@@ -33,6 +33,9 @@ public:
 	UMaterialParameterCollection* mCollection;
 	FVector Direction;
 	FVector ZeroPointDirection;
+	FTimerHandle GameoverTimerHandle;
+	// TimeOver
+	const float TIMEOVER = 3.0f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,7 +43,11 @@ protected:
 	void Shooting();
 
 public:
-	// Called every frame
+	// TimeOver
+	void SetTimeoverTimer();
+	void ClearTimeoverTimer();
+	UFUNCTION()
+	void Timeover();
 	void SetState(EStateEnum NewState);
 	virtual void Tick(float DeltaTime) override;
 	//Pawn effect

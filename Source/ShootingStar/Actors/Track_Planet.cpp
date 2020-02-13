@@ -138,12 +138,12 @@ void ATrack_Planet::SetupSplineMesh()
 		FString Fstring_sm = "SplineMesh" + FString::FromInt(i);   // SplineMeshComponent 이름 설정
 		FName Fname_sm = FName(*Fstring_sm);
 
-		
+		/*
 		USplineMeshComponent* SplineMesh = CreateDefaultSubobject<USplineMeshComponent>(Fname_sm);           // SplineMeshComponent초기화
 		/*ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
 		if (MESHSPLINE.Succeeded())
 			SplineMesh->SetStaticMesh(MESHSPLINE.Object);*/
-
+		/*
 		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 		SplineMesh->SetMobility(EComponentMobility::Movable);
 		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::Y, true);
@@ -157,7 +157,7 @@ void ATrack_Planet::SetupSplineMesh()
 		
 		SplineMesh->SetStartAndEnd(SP, ST, EP, ET, true);
 		SplineMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-		
+		*/
 	}
 }
 

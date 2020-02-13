@@ -8,6 +8,7 @@
 #include "State_Stop.h"
 #include "ConstructorHelpers.h"
 #include "Materials/MaterialParameterCollection.h"
+#include "GameFramework/ShootingStarPlayerController.h"
 #include "Misc/Guid.h"
 
 using namespace ELogVerbosity;
@@ -44,6 +45,8 @@ AShootingStarPawn::AShootingStarPawn()
 	TopDownCameraComponent->SetRelativeLocationAndRotation(FVector(0, 0, 1800.0f), FRotator(-90.f, 0.f, 0.f));
 	TopDownCameraComponent->SetAbsolute(true, true, true);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	GameoverTimerHandle = FTimerHandle();
 
 	StateIn = NewObject<UState_In>();
 	StateIdle = NewObject<UState_Idle>();
@@ -103,6 +106,25 @@ void AShootingStarPawn::Shooting()
 		PlayerBaseState = StateIdle;
 		PlayerBaseState->enter(this);
 		Direction = -ZeroPointDirection;
+	}
+}
+
+void AShootingStarPawn::SetTimeoverTimer()
+{
+	GetWorldTimerManager().SetTimer(GameoverTimerHandle, this, &AShootingStarPawn::Timeover, TIMEOVER, false);
+}
+
+void AShootingStarPawn::ClearTimeoverTimer()
+{
+	GetWorldTimerManager().ClearTimer(GameoverTimerHandle);
+}
+
+void AShootingStarPawn::Timeover()
+{
+	AShootingStarPlayerController* mController = Cast<AShootingStarPlayerController>(GetController());
+	if (mController != nullptr)
+	{
+		mController->GameOver();
 	}
 }
 

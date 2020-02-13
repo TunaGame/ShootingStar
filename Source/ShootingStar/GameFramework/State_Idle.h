@@ -15,7 +15,7 @@ class SHOOTINGSTAR_API UState_Idle : public UPlayerBaseState
 public:	
 	// Sets default values for this component's properties
 	UState_Idle();
-
+	FTimerHandle GameoverTimerHandle;
 
 	virtual void handleInput(AShootingStarPawn* playercenter) override;
 	virtual void update(AShootingStarPawn* playercenter) override;
