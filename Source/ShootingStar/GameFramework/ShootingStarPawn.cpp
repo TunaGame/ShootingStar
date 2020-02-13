@@ -25,7 +25,7 @@ AShootingStarPawn::AShootingStarPawn()
 	Sphere->SetSphereRadius(34.0f);
 	// Mesh
 	Mesh->SetupAttachment(Sphere);
-	ConstructorHelpers::FObjectFinder<UStaticMesh> ASSET_SM_PAWN(TEXT("StaticMesh'/Game/Pawn/SM_Pawn.SM_Pawn'"));// Mesh¼³Á¤
+	ConstructorHelpers::FObjectFinder<UStaticMesh> ASSET_SM_PAWN(TEXT("StaticMesh'/Game/Pawn/SM_Pawn.SM_Pawn'"));// MeshÂ¼Â³ÃÂ¤
 	if (ASSET_SM_PAWN.Succeeded())
 	{
 		Mesh->SetStaticMesh(ASSET_SM_PAWN.Object);
@@ -56,9 +56,7 @@ AShootingStarPawn::AShootingStarPawn()
 void AShootingStarPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
-
+	setEffect(EStateEnum::IDLE);
 }
 // Called every frame
 void AShootingStarPawn::Tick(float DeltaTime)

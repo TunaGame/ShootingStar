@@ -63,7 +63,7 @@ void ATrack_Planet::Tick(float DeltaTime)
 			shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
 			FString Fstring_sm = shootingstar_dir.ToString();
 			FName Fname_sm = FName(*Fstring_sm);
-			UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
+			//UE_LOG(LogTemp, Warning, TEXT("shortpoint : %s"), *Fstring_sm);
 
 			if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
 			{
@@ -92,7 +92,7 @@ void ATrack_Planet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	auto ShootingStar = Cast<AShootingStarPawn>(OtherActor);
-
+	UE_LOG(LogTemp, Warning, TEXT("Collided : %s"), *OtherActor->GetName())
 	if (ShootingStar == nullptr) return;
 
 	pp = ShootingStar;
@@ -103,7 +103,7 @@ void ATrack_Planet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	
 	FString Fstring_sm = FString::FromInt(point_num);
 	FName Fname_sm = FName(*Fstring_sm);
-	UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
+	//UE_LOG(LogTemp, Warning, TEXT("shortpoint: %s"), *Fstring_sm);
 
 }
 
