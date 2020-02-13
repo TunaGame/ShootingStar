@@ -63,12 +63,12 @@ void ATrack_Planet::Tick(float DeltaTime)
 			shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
 			
 
-			if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 0)
+			if (FVector::Distance(Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f && point_num > 1)
 			{
 				point_num--;
-				if (point_num < 0)
-					point_num = 0;
-				if (point_num == 0) {
+				if (point_num < 1)
+					point_num = 1;
+				if (point_num == 1&& FVector::Distance(Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World), pp->GetActorLocation()) <= 50.0f) {
 					AShootingStarPlayerController* pc = Cast<AShootingStarPlayerController>(GetWorld()->GetFirstPlayerController());
 					pc->GameOver();
 				}
@@ -79,6 +79,9 @@ void ATrack_Planet::Tick(float DeltaTime)
 			FName Fname_sm = FName(*Fstring_sm);
 			UE_LOG(LogTemp, Warning, TEXT("ZeroPointDirection : %s"), *Fstring_sm);*/
 		}
+	}
+	else {
+		return;
 	}
 	
 	
