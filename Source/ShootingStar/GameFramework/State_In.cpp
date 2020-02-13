@@ -19,7 +19,7 @@ void UState_In::handleInput(AShootingStarPawn* playercenter)
 
 void UState_In::update(AShootingStarPawn* playercenter)
 {	
-	UE_LOG(LogTemp, Warning, TEXT("IN"));
+	//UE_LOG(LogTemp, Warning, TEXT("IN"));
 	//playercenter->Movement->MaxSpeed = playercenter->Movement->MaxSpeed-50.0f;
 	playercenter->AddMovementInput(playercenter->Direction, 1);
 	if (!(playercenter->GetActorScale().Equals(FVector(0.2f, 0.2f, 0.2f)))) {

@@ -3,6 +3,7 @@
 
 #include "ShootingStarPlayerController.h"
 #include "GameFramework/ShootingStarPawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 
 using namespace ELogVerbosity;
@@ -33,10 +34,26 @@ void AShootingStarPlayerController::CloseWidget(EWidgetName name)
 void AShootingStarPlayerController::GameOver()
 {
 	AShootingStarPawn* mPawn = Cast<AShootingStarPawn>(GetPawn());
+	mPawn->ClearTimeoverTimer();
 	if (mPawn != nullptr) {
 		mPawn->Mesh->SetVisibility(false, true);
 		OpenWidget(EWidgetName::GAMEOVER);
 	}
+}
+
+void AShootingStarPlayerController::GoNextLevel()
+{
+	if (GetWorld()->GetName().Equals(FString("TUNA")))
+	{
+		using namespace ELogVerbosity;
+		UE_LOG(LogTemp, Warning, TEXT("Entered Wormhole"))
+		UGameplayStatics::OpenLevel(this, TEXT("TUNA_2"));
+	}
+	else 
+	{
+		GameOver();
+	}
+
 }
 
 void AShootingStarPlayerController::BeginPlay()

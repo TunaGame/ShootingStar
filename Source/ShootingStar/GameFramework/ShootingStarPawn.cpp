@@ -67,7 +67,7 @@ void AShootingStarPawn::Tick(float DeltaTime)
 	{
 		PlayerBaseState->update(this);
 	}
-
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetName());
 }
 
 

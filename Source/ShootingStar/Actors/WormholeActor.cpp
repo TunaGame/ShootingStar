@@ -38,6 +38,6 @@ void AWormholeActor::BeginOverlap(UPrimitiveComponent * OverlappedComponent,
 	AShootingStarPlayerController* mController;
 	if (mPawn != nullptr && (mController = Cast<AShootingStarPlayerController>(mPawn->GetController())) != nullptr)
 	{
-		mController->GameOver();
+		mController->GoNextLevel();
 	}
 }

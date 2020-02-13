@@ -23,12 +23,25 @@ void AShootingStarHUD::InitializeWidgets()
 
 bool AShootingStarHUD::OpenWidget(EWidgetName name)
 {
-	UUserWidget** WidgetPtrToOpen; 
-	if ((WidgetPtrToOpen = WidgetMap.Find(name)) != nullptr)
+
+	if (WidgetMap.Find(name) != nullptr)
 	{
-		if (!(*WidgetPtrToOpen)->IsInViewport())
+		WidgetPtrToOpen = *(WidgetMap.Find(name));
+		if (!WidgetPtrToOpen || !WidgetPtrToOpen->IsValidLowLevelFast())
 		{
-			(*WidgetPtrToOpen)->AddToViewport();
+			return false;
+		}
+
+		TArray<UObject*> ReferredToObjects;				//req outer, ignore archetype, recursive, ignore transient
+		FReferenceFinder ObjectReferenceCollector(ReferredToObjects, WidgetPtrToOpen, false, true, true, false);
+		ObjectReferenceCollector.FindReferences(WidgetPtrToOpen);
+
+		using namespace ELogVerbosity;
+		UE_LOG(LogTemp, Warning, TEXT("Reference count : %d"), ReferredToObjects.Num())
+
+		if (!WidgetPtrToOpen->IsInViewport())
+		{
+			WidgetPtrToOpen->AddToViewport();
 			return true;
 		}
 	}

@@ -22,6 +22,7 @@ public:
 	void CloseWidget(EWidgetName name);
 
 	void GameOver();
+	void GoNextLevel();
 
 protected:
 	virtual void BeginPlay() override;

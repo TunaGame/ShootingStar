@@ -18,6 +18,9 @@ class SHOOTINGSTAR_API AShootingStarHUD : public AHUD
 {
 	GENERATED_BODY()
 
+	UPROPERTY()
+	UUserWidget* WidgetPtrToOpen;
+
 public:
 	AShootingStarHUD();
 
