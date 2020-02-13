@@ -48,7 +48,7 @@ void ATrack_Planet::BeginPlay()
 {
 	Super::BeginPlay();
 	//pp = Cast<AShootingStarPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-
+	SetupSplineMesh();
 	
 }
 

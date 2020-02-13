@@ -24,6 +24,7 @@ class SHOOTINGSTAR_API AShootingStarHUD : public AHUD
 public:
 	AShootingStarHUD();
 
+	UPROPERTY()
 	TMap<EWidgetName, UUserWidget*> WidgetMap;
 
 	void InitializeWidgets();

@@ -19,6 +19,7 @@ void AShootingStarHUD::InitializeWidgets()
 	{
 		WidgetMap.Add(EWidgetName::GAMEOVER, CreateWidget<UUserWidget>(GetWorld(), GameWidgetClassBP.Class));
 	}
+
 }
 
 bool AShootingStarHUD::OpenWidget(EWidgetName name)
