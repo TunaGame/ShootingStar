@@ -2,11 +2,10 @@
 
 
 #include "BlackHole.h"
-#include "UObject/ConstructorHelpers.h"
+#include "ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-#include "GameFramework/PlayerController.h"
-#include "ShootingStar\GameFramework\ShootingStarPlayerController.h"
-#include "ShootingStar/GameFramework/ShootingStarPawn.h"
+#include "GameFramework/ShootingStarPlayerController.h"
+#include "GameFramework/ShootingStarPawn.h"
 
 // Sets default values
 ABlackHole::ABlackHole()
