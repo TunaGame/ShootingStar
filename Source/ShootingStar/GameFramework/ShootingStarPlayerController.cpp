@@ -33,6 +33,7 @@ void AShootingStarPlayerController::CloseWidget(EWidgetName name)
 void AShootingStarPlayerController::GameOver()
 {
 	OpenWidget(EWidgetName::GAMEOVER);
+	GetPawn()->Destroy();
 }
 
 void AShootingStarPlayerController::BeginPlay()
