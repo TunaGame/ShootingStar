@@ -39,7 +39,7 @@ ATrack_Planet::ATrack_Planet()
 	Spline = CreateDefaultSubobject<USplineComponent>(TEXT("SPLINE"));
 	Spline->SetupAttachment(RootComponent);
 	Spline->RemoveSplinePoint(1);
-	SetupSplineMesh();
+	SetupSpline();
 
 }
 
@@ -52,12 +52,19 @@ void ATrack_Planet::BeginPlay()
 	
 }
 
+void ATrack_Planet::OnConstruction(const FTransform& Transform)
+{
+	SetupSplineMesh();
+	UE_LOG(LogTemp, Warning, TEXT("OnConstruction"));
+}
+
 // Called every frame
 void ATrack_Planet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	RMovement->RotationRate = FRotator(0.0f, 10.0f, 0.0f);
-	
+	//using namespace ELogVerbosity;
+	//UE_LOG(LogTemp, Warning, TEXT("ppp = %s"), *ppp->tostring());
 	if (pp != nullptr) {
 		if (pp->getPawnState() == EStateEnum::INORBIT) {
 			shootingstar_dir = Spline->GetLocationAtSplinePoint(point_num, ESplineCoordinateSpace::Type::World) - pp->GetActorLocation();
@@ -78,13 +85,12 @@ void ATrack_Planet::Tick(float DeltaTime)
 			/*FString Fstring_sm = Spline->GetLocationAtSplinePoint(1, ESplineCoordinateSpace::Type::World).ToString();
 			FName Fname_sm = FName(*Fstring_sm);
 			UE_LOG(LogTemp, Warning, TEXT("ZeroPointDirection : %s"), *Fstring_sm);*/
+			
 		}
 	}
 	else {
 		return;
 	}
-	
-	
 	//UE_LOG(LogTemp, Warning, TEXT("ddfs"));
 }
 
@@ -125,42 +131,38 @@ void ATrack_Planet::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	UE_LOG(LogTemp, Warning, TEXT("overlapend "));
 }
 
-
-
-
-void ATrack_Planet::SetupSplineMesh()
+void ATrack_Planet::SetupSpline()
 {
+	Spline_Point[0] = FSplinePoint();
 	for (int32 i = 0; i < 30; i++) {
 		// 궤도포인트 정의
 		Spline_Point[i] = FSplinePoint(i + 1, (i + 1) * FVector(FMath::Sin(Spline_Dgree) * 10.0f, FMath::Cos(Spline_Dgree) * 10.0f, 0.0f)
 			, FVector(10.0, 10.0, 10.0), FVector(10.0, 10.0, 10.0), FRotator(0.0f, 0.0f, 0.0f), FVector(1.0f, 1.0f, 1.0f), curve);
 		Spline->AddPoint(Spline_Point[i], true);
 		Spline_Dgree += 0.555;
-
-		// 궤도 메쉬추가
-		FString Fstring_sm = "SplineMesh" + FString::FromInt(i);   // SplineMeshComponent 이름 설정
-		FName Fname_sm = FName(*Fstring_sm);
-
-		/*
-		USplineMeshComponent* SplineMesh = CreateDefaultSubobject<USplineMeshComponent>(Fname_sm);           // SplineMeshComponent초기화
-		/*ConstructorHelpers::FObjectFinder<UStaticMesh> MESHSPLINE(TEXT("/Engine/BasicShapes/Sphere.Sphere"));// Mesh설정
-		if (MESHSPLINE.Succeeded())
-			SplineMesh->SetStaticMesh(MESHSPLINE.Object);*/
-		/*
-		SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
-		SplineMesh->SetMobility(EComponentMobility::Movable);
-		SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::Y, true);
-		
-		SplineMesh->SetupAttachment(Spline);
-		
-		FVector SP = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
-		FVector ST = Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
-		FVector EP = Spline->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
-		FVector ET = Spline->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
-		
-		SplineMesh->SetStartAndEnd(SP, ST, EP, ET, true);
-		SplineMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
-		*/
 	}
 }
 
+void ATrack_Planet::SetupSplineMesh()
+{
+	if (ATrack_Planet::Spline != nullptr)
+	{
+		UWorld* World = this->GetWorld();
+		for (int32 i = 0; i < (Spline->GetNumberOfSplinePoints() - 2); i++)
+		{
+			USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(this, USplineMeshComponent::StaticClass());
+			SplineMesh->SetStaticMesh(Meshs);
+			SplineMesh->RegisterComponentWithWorld(World);
+			SplineMesh->CreationMethod = EComponentCreationMethod::UserConstructionScript;
+			SplineMesh->SetMobility(EComponentMobility::Movable);
+			SplineMesh->SetForwardAxis(ESplineMeshAxis::Type::Y, true);
+			SplineMesh->AttachToComponent(Spline, FAttachmentTransformRules::KeepRelativeTransform);
+			FVector SP = Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
+			FVector ST = Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::Type::Local);
+			FVector EP = Spline->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
+			FVector ET = Spline->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::Type::Local);
+			SplineMesh->SetStartAndEnd(SP, ST, EP, ET, true);
+			SplineMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+		}
+	}
+}

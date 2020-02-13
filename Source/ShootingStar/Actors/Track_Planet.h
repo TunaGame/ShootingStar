@@ -18,6 +18,10 @@ class SHOOTINGSTAR_API ATrack_Planet : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATrack_Planet();
+	void SetupSplineMesh();
+	void SetupSpline();
+
+	virtual void OnConstruction(const FTransform& Transform) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,6 +32,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* Meshs;
+
 	UPROPERTY(Category = "Path", VisibleAnywhere)
 	USplineComponent* Spline;
 
@@ -55,7 +62,6 @@ private:
 	class AShootingStarPawn* pp;
 
 	// SetupSplineMesh에서 사용
-	void SetupSplineMesh();
 	float Spline_Dgree = 0.0;
 	TEnumAsByte<ESplinePointType::Type> curve = ESplinePointType::Curve;  //SplinePoint 타입
 	FSplinePoint Spline_Point[30];

@@ -46,6 +46,10 @@ AShootingStarPawn::AShootingStarPawn()
 	StateIdle = NewObject<UState_Idle>();
 	StateStop = NewObject<UState_Stop>();
 
+	StateIn->AddToRoot();
+	StateIdle->AddToRoot();
+	StateStop->AddToRoot();
+
 	PlayerBaseState = StateStop;
 }
 
@@ -105,11 +109,17 @@ void AShootingStarPawn::Shooting()
 void AShootingStarPawn::SetTimeoverTimer()
 {
 	GetWorldTimerManager().SetTimer(GameoverTimerHandle, this, &AShootingStarPawn::Timeover, TIMEOVER, false);
+	UE_LOG(LogTemp, Warning, TEXT("Timer on Set"));
 }
 
 void AShootingStarPawn::ClearTimeoverTimer()
 {
-	GetWorldTimerManager().ClearTimer(GameoverTimerHandle);
+	if (GetWorldTimerManager().IsTimerActive(GameoverTimerHandle))
+	{
+		using namespace ELogVerbosity;
+		UE_LOG(LogTemp, Warning, TEXT("Clear timer"));
+		GetWorldTimerManager().ClearTimer(GameoverTimerHandle);
+	}
 }
 
 void AShootingStarPawn::Timeover()
@@ -155,13 +165,12 @@ void AShootingStarPawn::setEffect(EStateEnum NewState)
 	switch (NewState)
 	{
 	case EStateEnum::IDLE:
-		UE_LOG(LogTemp, Warning, TEXT("IDLE EFFECT"));
+		//UE_LOG(LogTemp, Warning, TEXT("IDLE EFFECT"));
 		Mesh->SetScalarParameterValueOnMaterials("Burn", .0f);
 		break;
 	case EStateEnum::INORBIT:
 		Mesh->SetScalarParameterValueOnMaterials("Burn", 1.0f);
-		UE_LOG(LogTemp, Warning, TEXT("INORBIT EFFECT"));
-
+		//UE_LOG(LogTemp, Warning, TEXT("INORBIT EFFECT"));
 		break;
 	default:
 		break;

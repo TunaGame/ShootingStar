@@ -21,6 +21,7 @@ void UState_Idle::handleInput(AShootingStarPawn* playercenter)
 void UState_Idle::update(AShootingStarPawn* playercenter)
 {
 	playercenter->AddMovementInput(playercenter->Direction, 1);
+	UE_LOG(LogTemp, Warning, TEXT("IDLE"));
 }
 
 void UState_Idle::enter(AShootingStarPawn* playercenter)
